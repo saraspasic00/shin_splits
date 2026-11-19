@@ -1,0 +1,83 @@
+.container {
+  display: grid;
+  place-items: center;
+  min-height: clamp(14rem, 45svh, 25rem);
+  width: 100%;
+  color: var(--forest);
+}
+
+.scene {
+  position: relative;
+  width: 96px;
+  height: 112px;
+  animation: appear 180ms ease-out both;
+}
+
+.runner {
+  display: block;
+  width: 96px;
+  height: 96px;
+  animation: stride 650ms ease-in-out infinite;
+}
+
+.track {
+  position: absolute;
+  right: 4px;
+  bottom: 6px;
+  left: 4px;
+  height: 3px;
+  border-radius: 999px;
+  background: repeating-linear-gradient(
+    to right,
+    var(--terracotta) 0 18px,
+    transparent 18px 30px
+  );
+  animation: ground 650ms linear infinite;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes stride {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+
+  50% {
+    transform: translateY(-5px) rotate(2deg);
+  }
+}
+
+@keyframes ground {
+  to {
+    background-position: -30px 0;
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene,
+  .runner,
+  .track {
+    animation: none;
+  }
+}

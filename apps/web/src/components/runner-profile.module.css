@@ -1,0 +1,662 @@
+.pageHeader {
+  width: 100%;
+  max-width: none;
+  margin-bottom: 1.4rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--line);
+}
+.pageHeader h1 {
+  max-width: none;
+  font-size: clamp(2.15rem, 4vw, 3.4rem);
+  margin-bottom: 0.6rem;
+}
+.pageHeader p:last-child {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+.wizard {
+  width: 100%;
+  max-width: 64rem;
+  margin-inline: auto;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--paper);
+}
+.steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 1rem 1.5rem;
+  background: var(--sage);
+}
+.steps li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.steps li > span {
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  font-size: 0.7rem;
+}
+.steps li[aria-current="step"] {
+  color: var(--forest);
+  font-weight: 700;
+}
+.steps li[aria-current="step"] > span {
+  background: var(--forest);
+  color: var(--paper);
+  border-color: var(--forest);
+}
+.steps li[data-complete="true"] > span {
+  background: var(--terracotta);
+  color: var(--ink);
+  border-color: transparent;
+}
+.wizard form {
+  padding: 1.5rem;
+}
+.stepHeading {
+  margin-bottom: 1.3rem;
+}
+.stepHeading :global(.eyebrow),
+.review :global(.eyebrow) {
+  font-size: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+.stepHeading h2 {
+  font-size: clamp(1.65rem, 3vw, 2.1rem);
+  margin-bottom: 0.65rem;
+}
+.fields {
+  min-width: 0;
+  margin: 0;
+}
+.fields label,
+.fields legend {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+.fields label {
+  display: block;
+  margin-bottom: 0.4rem;
+}
+.fields input:not([type="radio"]):not([type="checkbox"]),
+.fields select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+}
+.hint {
+  margin: 0.7rem 0 1rem;
+  max-width: 65ch;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+.goalOptions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.fields .goalOption {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 64px;
+  padding: 0.9rem 1rem;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.goalOption:has(input:checked) {
+  background: var(--sage);
+  border-color: var(--forest);
+}
+.goalOption input,
+.days input {
+  accent-color: var(--forest);
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin: 0;
+}
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+.fields .days label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 68px;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+.days label:has(input:checked) {
+  background: var(--sage);
+  border-color: var(--forest);
+}
+.limit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 7rem;
+  align-items: center;
+  gap: 1rem;
+}
+.limit label {
+  margin: 0;
+}
+.optional {
+  font-weight: 400;
+  color: var(--muted);
+}
+.review {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--sage);
+  border-radius: 8px;
+}
+.review p {
+  margin-bottom: 0.35rem;
+  font-size: 0.82rem;
+}
+.textButton {
+  background: transparent;
+  color: var(--forest);
+  padding: 0.35rem 0;
+  min-height: 44px;
+  text-decoration: underline;
+  font-size: 0.8rem;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  margin-top: 0.7rem;
+  border-top: 1px solid var(--line);
+}
+.actions > a {
+  font-size: 0.85rem;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.actions > button {
+  font-size: 0.85rem;
+}
+.secondary {
+  background: transparent;
+  color: var(--forest);
+  border: 1px solid var(--line);
+}
+.error {
+  margin: 1rem 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--forest);
+  border-left: 4px solid var(--terracotta);
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+.error ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+.status {
+  margin: 0.6rem 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.status:empty {
+  display: none;
+}
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.profileGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+  max-width: none;
+}
+.identity,
+.summaryCard,
+.scheduleCard {
+  padding: clamp(1.2rem, 2.5vw, 1.8rem);
+  border-radius: 12px;
+}
+.identity {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--terracotta);
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.25rem;
+}
+.identity h2 {
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  overflow-wrap: anywhere;
+  margin-bottom: 0.6rem;
+}
+.monogram {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  margin: 0;
+  border: 1px solid var(--forest);
+  border-radius: 50%;
+  font-family: var(--display);
+  font-size: 1.65rem;
+}
+.email {
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+
+.identity button {
+  background: transparent;
+  color: var(--forest);
+  border: 1px solid var(--forest);
+}
+.summaryCard {
+  background: var(--sage);
+  min-width: 0;
+}
+.summaryCard h2,
+.scheduleCard h2 {
+  font-size: 1.7rem;
+  margin-bottom: 1rem;
+}
+.summaryCard > p,
+.scheduleCard > p {
+  font-size: 0.85rem;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin: 1.5rem 0 0;
+}
+.stats > div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.2rem;
+}
+.stats dt {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.stats dd {
+  margin: 0;
+  font-size: 1.8rem;
+  font-family: var(--display);
+}
+.scheduleCard {
+  border: 1px solid var(--line);
+  min-width: 0;
+}
+.dayChips {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+.dayChips li {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.5rem;
+  min-height: 76px;
+  padding: 0.5rem 0.1rem;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  text-transform: capitalize;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.profileActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+.profileActions :global(.button-link) {
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .pageHeader {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
+  .steps {
+    padding: 0.8rem;
+    gap: 0.4rem;
+  }
+  .steps li {
+    flex-direction: column;
+    gap: 0.3rem;
+    text-align: center;
+    font-size: 0.7rem;
+  }
+  .wizard form {
+    padding: 1rem;
+  }
+  .numbers {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+  .numbers > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 6.5rem;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .numbers label {
+    margin: 0;
+  }
+  .goalOptions {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .fields .goalOption {
+    min-height: 52px;
+    padding: 0.7rem;
+  }
+  .days {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .fields .days label {
+    min-height: 52px;
+    flex-direction: row;
+    gap: 0.3rem;
+  }
+  .limit {
+    grid-template-columns: minmax(0, 1fr) 6.5rem;
+  }
+  .actions {
+    align-items: stretch;
+  }
+  .actions > button {
+    padding: 0.7rem 0.85rem;
+  }
+  .profileGrid {
+    grid-template-columns: 1fr;
+  }
+  .identity {
+    grid-row: auto;
+  }
+
+  .monogram {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0;
+    font-size: 1.3rem;
+  }
+}
+
+/* Identity band and availability */
+.identity::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 26rem;
+  height: 40rem;
+  right: 12%;
+  top: -21rem;
+  border: 1px solid rgb(23 63 53 / 12%);
+  border-radius: 50%;
+  box-shadow:
+  0 0 0 16px rgb(23 63 53 / 4%),
+  0 0 0 32px rgb(23 63 53 / 4%),
+  0 0 0 48px rgb(23 63 53 / 4%);
+  transform: rotate(35deg);
+  pointer-events: none;
+}
+.identityText {
+  min-width: 0;
+}
+.identityText :global(.eyebrow) {
+  margin-bottom: 0.35rem;
+  font-size: 0.7rem;
+}
+.identityText h2 {
+  margin-bottom: 0.3rem;
+}
+.identityText .email {
+  margin-bottom: 0;
+}
+.accountControls {
+  display: flex;
+  align-items: center;
+}
+.dayChips li[data-available="true"] {
+  background: var(--forest);
+  color: var(--paper);
+  border-color: var(--forest);
+}
+.dayMark {
+  font-size: 1rem;
+  line-height: 1;
+}
+.stats > div + div {
+  padding-left: 0.85rem;
+  border-left: 1px solid var(--line);
+}
+.profileGrid:not(:has(.scheduleCard)) > .summaryCard {
+  grid-column: 1 / -1;
+}
+
+/* Short, purposeful motion. There is no continuously moving decoration. */
+.steps::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--forest);
+  transform: scaleX(0.333333);
+  transform-origin: left;
+  transition: transform 220ms ease;
+}
+.steps[data-step="1"]::after {
+  transform: scaleX(0.666667);
+}
+.steps[data-step="2"]::after {
+  transform: scaleX(1);
+}
+.steps li > span,
+.goalOption,
+.days label {
+  transition:
+  background-color 180ms ease,
+  border-color 180ms ease,
+  color 180ms ease;
+}
+.profileGrid > section {
+  animation: cardEnter 240ms ease-out both;
+}
+.profileGrid > section:nth-child(2) {
+  animation-delay: 40ms;
+}
+.profileGrid > section:nth-child(3) {
+  animation-delay: 80ms;
+}
+.stepPanel {
+  animation: stepForward 180ms ease-out both;
+}
+.stepPanel[data-direction="back"] {
+  animation-name: stepBack;
+}
+.wizard button,
+.profileGrid button,
+.profileActions a {
+  transition:
+  transform 150ms ease,
+  background-color 180ms ease,
+  box-shadow 180ms ease;
+}
+.wizard button:active:not(:disabled),
+.profileGrid button:active:not(:disabled),
+.profileActions a:active {
+  transform: scale(0.98);
+}
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes stepForward {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes stepBack {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .wizard button:not(:disabled):hover,
+  .profileActions a:hover {
+    transform: translateY(-1px);
+  }
+  .accountControls button:not(:disabled):hover {
+    background: var(--forest);
+    color: var(--paper);
+  }
+}
+@media (min-width: 701px) and (max-width: 950px) {
+  .profileGrid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 700px) {
+  .identity {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.85rem;
+  }
+  .accountControls {
+    grid-column: 2;
+  }
+  .accountControls button {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.8rem;
+  }
+  .dayChips {
+    gap: 0.25rem;
+  }
+  .dayChips li {
+    min-height: 64px;
+    font-size: 0.65rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .profileGrid > section,
+  .stepPanel {
+    animation: none;
+  }
+  .steps::after,
+  .steps li > span,
+  .goalOption,
+  .days label,
+  .wizard button,
+  .profileGrid button,
+  .profileActions a {
+    transition: none;
+  }
+  .wizard button:not(:disabled):hover,
+  .wizard button:active:not(:disabled),
+  .profileGrid button:active:not(:disabled),
+  .profileActions a:hover,
+  .profileActions a:active {
+    transform: none;
+  }
+}
+@media (min-width: 701px) {
+  .pageHeader h1 {
+    max-width: none;
+    margin: 0;
+    font-size: var(--desktop-heading-size);
+    line-height: 1.1;
+    letter-spacing: -0.045em;
+  }
+
+  .pageHeader {
+    margin-bottom: 1rem;
+    padding-bottom: 0.9rem;
+  }
+  .pageHeader :global(.eyebrow) { margin-bottom: 0.4rem; }
+  .pageHeader p:last-child { margin-top: 0.5rem; font-size: 0.875rem; }
+  .profileGrid { gap: 1rem; }
+  .identity, .summaryCard, .scheduleCard { padding: 1.25rem; }
+  .identity h2 { font-size: 2.25rem; }
+  .summaryCard h2, .scheduleCard h2 { font-size: 1.5rem; margin-bottom: 0.75rem; }
+  .stats { margin-top: 1.1rem; }
+  .dayChips li { min-height: 64px; gap: 0.35rem; }
+  .profileActions { gap: 0.75rem; }
+}

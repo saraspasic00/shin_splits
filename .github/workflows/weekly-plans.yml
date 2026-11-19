@@ -1,0 +1,20 @@
+name: Prepare training weeks
+on:
+  schedule:
+    - cron: "20 5 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: prepare-training-weeks
+  cancel-in-progress: false
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare missing next weeks
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+          WEEKLY_JOB_SECRET: ${{ secrets.WEEKLY_JOB_SECRET }}
+        run: python3 scripts/prepare-weeks.py

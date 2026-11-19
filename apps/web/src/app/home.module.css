@@ -1,0 +1,644 @@
+.home {
+  --home-rule: #a6afa3;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.header {
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--home-rule);
+}
+
+.kicker {
+  margin: 0 0 0.9rem;
+  font-family: var(--body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  max-width: none;
+  margin: 0;
+  font-size: clamp(2.3rem, 4.2vw, 4rem);
+  letter-spacing: -0.045em;
+}
+
+.tagline {
+  margin: 0.8rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.topGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 1.25rem;
+}
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: 360px;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border-radius: 9px;
+  background: var(--terracotta);
+  color: var(--ink);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.hero h2 {
+  max-width: 28ch;
+}
+
+.duration {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(5.5rem, 10vw, 10rem);
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -0.065em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.unit {
+  font-family: var(--body);
+  font-size: clamp(1.2rem, 2.6vw, 2.4rem);
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.effort {
+  margin: 0.7rem 0 1.5rem;
+  font-size: 1.1rem;
+}
+
+.restTitle {
+  max-width: 9ch;
+  margin: 1rem 0 1.75rem;
+  font-family: var(--display);
+  font-size: clamp(3rem, 5vw, 5rem);
+  font-style: italic;
+  line-height: 1.05;
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 48px;
+  padding: 0.8rem 1.2rem;
+  border-radius: 5px;
+  background: var(--forest);
+  color: var(--paper);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.action:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.heroFooter {
+  margin: 1.3rem 0 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+}
+
+.trackLines {
+  position: absolute;
+  z-index: 0;
+  right: -290px;
+  bottom: -260px;
+  width: 470px;
+  height: 560px;
+  border: 1px solid rgb(32 43 39 / 18%);
+  border-radius: 50%;
+  box-shadow:
+  0 0 0 22px rgb(32 43 39 / 10%),
+  0 0 0 23px rgb(32 43 39 / 15%),
+  0 0 0 45px rgb(32 43 39 / 6%),
+  0 0 0 46px rgb(32 43 39 / 15%),
+  0 0 0 68px rgb(32 43 39 / 4%),
+  0 0 0 69px rgb(32 43 39 / 15%);
+  pointer-events: none;
+}
+
+.checkIn {
+  min-width: 0;
+}
+
+.checkIn :global(.check-in-card) {
+  height: 100%;
+  padding: 1.5rem;
+  border-radius: 9px;
+}
+
+.checkIn h2 {
+  margin-bottom: 1.4rem;
+  font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+}
+
+.checkIn legend {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.checkIn :global(.choice-group) {
+  gap: 0;
+}
+
+.checkIn :global(.choice span) {
+  border-radius: 0;
+}
+
+.checkIn :global(.choice + .choice span) {
+  border-left: 0;
+}
+
+.checkIn :global(.choice:first-child span) {
+  border-radius: 4px 0 0 4px;
+}
+
+.checkIn :global(.choice:last-child span) {
+  border-radius: 0 4px 4px 0;
+}
+
+.checkIn button {
+  width: 100%;
+}
+
+.checkIn :global(.form-note) {
+  font-size: 0.75rem;
+}
+
+.week {
+  padding: 1.2rem 1.4rem;
+  border: 1px solid var(--home-rule);
+  border-radius: 8px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--home-rule);
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 2.6vw, 2.5rem);
+  font-style: italic;
+}
+
+.sectionHeader p,
+.sectionHeader a {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.sectionHeader a {
+  text-underline-offset: 4px;
+}
+
+.weekDays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  padding: 0;
+  margin: 1rem 0 0;
+  list-style: none;
+}
+
+.weekDays li {
+  display: grid;
+  align-content: start;
+  gap: 0.15rem;
+  min-width: 0;
+  padding-inline: 0.8rem;
+}
+
+.weekDays li:first-child {
+  padding-left: 0;
+}
+
+.weekDays li + li {
+  border-left: 1px solid var(--home-rule);
+}
+
+.weekDays time {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sessionName {
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+
+.weekDuration {
+  font-family: var(--display);
+  font-size: 2.6rem;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.bottomGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2rem;
+}
+
+.upcoming {
+  min-width: 0;
+}
+
+.upcomingList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.upcomingList li {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding-block: 1.1rem;
+  border-bottom: 1px solid var(--home-rule);
+  font-size: 0.95rem;
+}
+
+.upcomingList time {
+  display: grid;
+  gap: 0.15rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.upcomingList time span {
+  color: var(--muted);
+  font-size: 0.65rem;
+  font-weight: 400;
+}
+
+.upcomingDuration {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.history {
+  padding: 1.5rem 1.75rem;
+  border-radius: 8px;
+  background: var(--forest);
+  color: var(--paper);
+}
+
+.history h2 {
+  margin-bottom: 0.9rem;
+  font-size: clamp(2rem, 3vw, 3rem);
+  font-style: italic;
+}
+
+.history > p:last-child {
+  max-width: 36ch;
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}
+
+.demoNote {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.loading {
+  padding-block: 2rem;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 1100px) {
+  .topGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    min-height: 320px;
+  }
+
+  .bottomGrid {
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .home {
+    gap: 1rem;
+  }
+
+  .header {
+    padding-bottom: 1rem;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .header .kicker {
+    font-size: 0.65rem;
+  }
+
+  .tagline {
+    font-size: 0.8rem;
+  }
+
+  .hero {
+    min-height: 285px;
+    padding: 1.4rem;
+  }
+
+  .duration {
+    font-size: 7rem;
+  }
+
+  .unit {
+    font-size: 1.5rem;
+  }
+
+  .checkIn :global(.check-in-card) {
+    padding: 1.25rem;
+  }
+
+  .checkIn h2 {
+    font-size: 1.8rem;
+  }
+
+  /* The complete schedule remains available on the Weekly plan tab. */
+  .week {
+    display: none;
+  }
+
+  .bottomGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .sectionHeader h2 {
+    font-size: 2rem;
+  }
+
+  .upcomingList li {
+    grid-template-columns: 3.6rem minmax(0, 1fr) auto;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+  }
+}
+/* Compact heading on tablets and desktop. */
+@media (min-width: 701px) {
+  .header {
+    margin-bottom: 0;
+    padding-bottom: 0.9rem;
+  }
+
+  .header h1 {
+    font-size: var(--desktop-heading-size);
+    line-height: 1.1;
+  }
+
+  .header .kicker {
+    margin-bottom: 0.4rem;
+  }
+
+  .header .tagline {
+    margin: 0.5rem 0 0;
+    font-size: 0.875rem;
+  }
+}
+
+/* Wide screens: use horizontal space to reduce page height. */
+@media (min-width: 1200px) {
+  .home {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .header,
+  .topGrid,
+  .demoNote {
+    grid-column: 1 / -1;
+  }
+
+  .topGrid {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .hero {
+    min-height: 0;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .hero h2 {
+    max-width: none;
+    margin-bottom: 0.65rem;
+  }
+
+  .duration {
+    font-size: clamp(4.75rem, 6vw, 5.5rem);
+  }
+
+  .unit {
+    font-size: 1.6rem;
+  }
+
+  .effort {
+    margin: 0.4rem 0 0.9rem;
+    font-size: 1rem;
+  }
+
+  .restTitle {
+    max-width: 16ch;
+    margin: 0.75rem 0 1rem;
+    font-size: 3rem;
+  }
+
+  .action {
+    min-height: 44px;
+    padding: 0.65rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .heroFooter {
+    margin-top: 0.8rem;
+    letter-spacing: 0.025em;
+  }
+
+  .checkIn :global(.check-in-card) {
+    padding: 1.1rem 1.25rem;
+  }
+
+  .checkIn h2 {
+    margin: 0 0 0.65rem;
+    font-size: 1.75rem;
+    line-height: 1.15;
+  }
+
+  .checkIn fieldset {
+    margin: 0 0 0.65rem;
+    padding: 0;
+  }
+
+  .checkIn legend {
+    margin-bottom: 0.3rem;
+  }
+
+  .checkIn :global(.choice span) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.45rem;
+    font-size: 0.875rem;
+  }
+
+  .checkIn :global(.form-note) {
+    margin: 0.5rem 0;
+    line-height: 1.4;
+  }
+
+  .checkIn button {
+    min-height: 44px;
+    padding: 0.6rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .checkIn :global(.status) {
+    margin: 0.5rem 0 0;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .checkIn :global(.status:empty) {
+    margin: 0;
+  }
+
+  .week {
+    min-width: 0;
+    padding: 1rem 1.15rem;
+  }
+
+  .sectionHeader {
+    gap: 0.5rem;
+    padding-bottom: 0.65rem;
+  }
+
+  .sectionHeader h2 {
+    font-size: 1.45rem;
+    line-height: 1.2;
+  }
+
+  .sectionHeader p,
+  .sectionHeader a {
+    font-size: 0.8rem;
+  }
+
+  .week > .tagline {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .weekDays {
+    margin-top: 0.8rem;
+  }
+
+  .weekDays li {
+    padding-inline: 0.5rem;
+  }
+
+  .sessionName {
+    font-size: 0.75rem;
+  }
+
+  .weekDuration {
+    font-size: 2rem;
+  }
+
+  .bottomGrid {
+    min-width: 0;
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  /* Use the full row when no weekly overview exists yet. */
+  .topGrid + .bottomGrid {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .upcomingList li {
+    grid-template-columns: 4rem minmax(0, 1fr) auto;
+    padding-block: 0.55rem;
+    font-size: 0.8rem;
+  }
+
+  .history {
+    padding: 0.9rem 1.15rem;
+  }
+
+  .history .kicker {
+    margin-bottom: 0.25rem;
+    font-size: 0.65rem;
+  }
+
+  .history h2 {
+    margin: 0 0 0.4rem;
+    font-size: 1.4rem;
+    line-height: 1.2;
+  }
+
+  .history h2 br {
+    display: none;
+  }
+
+  .history > p:last-child {
+    max-width: none;
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+}
