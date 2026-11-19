@@ -1,0 +1,103 @@
+.stage {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  min-block-size: calc(100svh - 8rem);
+  padding-block: clamp(.75rem, 3vh, 2rem);
+  box-sizing: border-box;
+}
+.spread {
+  display: grid;
+  grid-template-columns: minmax(0, .95fr) minmax(0, 1fr);
+  width: min(100%, 56rem);
+  overflow: hidden;
+  background: var(--paper, #f7f3eb);
+  border: 1px solid var(--line, #a6afa3);
+  border-radius: 14px;
+}
+.landscape {
+  background: #dce4d8 url("/art/trail-runner.webp") center / cover no-repeat;
+}
+.panel {
+  min-width: 0;
+  align-self: center;
+  padding: clamp(1.5rem, 3vw, 3rem);
+}
+.panel :global(.page-header) {
+  margin: 0 0 1.25rem;
+  padding: 0;
+  border: 0;
+}
+.panel :global(.page-header h1) {
+  margin: .4rem 0;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1.05;
+}
+.panel :global(.auth-card) {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.panel :global(.auth-form) { min-width: 0; }
+.panel :global(.auth-form input) { box-sizing: border-box; }
+.panel :global(.auth-form button[type="submit"]) { width: 100%; }
+@media (max-width: 700px) {
+  .stage { min-block-size: auto; padding: .5rem 0 1rem; }
+  .spread { max-width: 28rem; grid-template-columns: 1fr; }
+  .landscape { height: clamp(6rem, 18svh, 9rem); background-position: center 61%; }
+  .panel { padding: 1.25rem; }
+}
+/* .panel h1.journalLabel {
+  margin: 0 0 1rem;
+  color: var(--muted, #505c54);
+  font-family: var(--body, Arial, sans-serif);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-transform: none;
+  max-width: none;
+width: auto;
+} */
+
+.panel h1.journalLabel {
+  width: auto;
+  max-width: none;
+  margin: 0 0 1.25rem;
+  font-family: Georgia, "Times New Roman", serif;
+font-style: italic;
+font-weight: 400;
+font-size: clamp(1.6rem, 2.2vw, 2rem);
+line-height: 1.15;
+letter-spacing: -0.025em;
+color: var(--forest, #173f35);
+}
+
+.panel :global(.auth-form) {
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.panel :global(.auth-form label) {
+  font-weight: 500;
+}
+
+.panel :global(.auth-form label .muted) {
+  font-size: 0.9em;
+  font-weight: 400;
+}
+
+.panel :global(.auth-form input),
+.panel :global(.auth-form button) {
+  font: inherit;
+}
+
+.panel :global(.auth-form button) {
+  font-weight: 600;
+}

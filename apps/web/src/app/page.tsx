@@ -10,6 +10,7 @@ import { getWeekPlan } from "@/lib/week-plans";
     import { currentMonday, weekHref } from "@/lib/week-calendar";
 import styles from "./home.module.css";
 import RunHistory from "@/components/run-history";
+import HomeArrival from "@/components/home-arrival";
 const weekdayFormatter = new Intl.DateTimeFormat("en-GB", {
   weekday: "short",
   timeZone: "UTC",
@@ -122,6 +123,7 @@ async function DashboardContent() {
         : "A little structure.";
 
   return (
+    <HomeArrival>
     <div className={styles.home}>
       <header className={styles.header}>
         <p className={styles.kicker}>
@@ -285,5 +287,6 @@ async function DashboardContent() {
         <RunHistory/>
       </div>
     </div>
+    </HomeArrival>
   );
 }

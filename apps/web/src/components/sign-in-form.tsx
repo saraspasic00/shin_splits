@@ -2,11 +2,11 @@
 
 import { useState, type SubmitEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
-
+import RunnerLoading from "@/components/runner-loading";
 export default function SignInForm() {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  const [welcoming, setWelcoming] = useState(false);
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -65,15 +65,32 @@ export default function SignInForm() {
     } catch {
       setError("We couldn’t connect to sign-in. Please try again.");
     } finally {
-      setPending(false);
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        setWelcoming(true);
+        await new Promise<void>((resolve) => window.setTimeout(resolve, 1600));
+
+        try {
+          sessionStorage.setItem("shin-splits:welcome", "1");
+        } catch {
+          // Home still opens if browser storage is unavailable.
+        }
+      }
+
+      window.location.replace("/");
     }
   }
-
+if (welcoming) {
+  return (
+    <div className="login-welcome" role="status" aria-label="Opening your home page">
+      <div className="login-welcome-runner" aria-hidden="true">
+        <RunnerLoading />
+      </div>
+    </div>
+  );
+}
   return (
     <form className="auth-form" onSubmit={handleSubmit} aria-busy={pending}>
-      <label htmlFor="displayName">
-        What should we call you? <span className="muted">(optional)</span>
-      </label>
+      <label htmlFor="displayName">What should we call you?</label>
       <input
         id="displayName"
         name="displayName"

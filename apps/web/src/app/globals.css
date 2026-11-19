@@ -1297,3 +1297,28 @@ button:disabled {
 .plan-profile-button:hover {
   background: var(--sage);
 }
+
+.login-welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: var(--paper, #f7f3eb);
+  color: var(--forest, #173f35);
+}
+
+.login-welcome-runner {
+  animation: welcome-runner 1.6s ease-in-out both;
+}
+
+@keyframes welcome-runner {
+  0%   { opacity: 0; transform: translateX(-18px); }
+  18%  { opacity: 1; }
+  78%  { opacity: 1; }
+  100% { opacity: 0; transform: translateX(18px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-welcome-runner { animation: none; }
+}
