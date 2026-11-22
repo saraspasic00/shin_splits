@@ -69,19 +69,22 @@ class PlanPreviewTests(unittest.TestCase):
             any("30 baseline minutes" in note for note in result.notes)
         )
 
-    def test_does_not_invent_a_beginner_plan(self):
-        result = build_plan_preview(
-            make_request(
-                experience="starting",
-                goal="start-running",
-                currentRunsPerWeek=0,
-                currentWeeklyMinutes=0,
-                longestRecentRunMinutes=0,
-            )
-        )
-
-        self.assertIsInstance(result, PreviewUnavailable)
-        self.assertEqual(result.status, "unsupported")
+    def test_every_experience_and_goal_receives_a_starter_week(self):
+        for experience in ("starting", "returning", "regular"):
+            for goal in ("start-running", "consistency", "5k", "10k"):
+                for count, minutes, longest in [(0, 0, 0), (3, 90, 35)]:
+                    with self.subTest(experience=experience, goal=goal, baseline=count):
+                        result = build_plan_preview(make_request(
+                            experience=experience, goal=goal,
+                            currentRunsPerWeek=count, currentWeeklyMinutes=minutes,
+                            longestRecentRunMinutes=longest, maxSessionMinutes=8,
+                        ))
+                        self.assertIsInstance(result, PreviewReady)
+                        self.assertEqual(len(result.plan.sessions), 7)
+                        runs = [s for s in result.plan.sessions if s.kind == "run"]
+                        self.assertEqual(len(runs), 3 if count else 2)
+                        self.assertTrue(all(s.duration_minutes == 8 for s in runs))
+                        self.assertTrue(all(s.date.weekday() in (1, 2, 3) for s in runs))
 
     def test_requests_review_of_contradictory_baseline(self):
         result = build_plan_preview(
@@ -95,7 +98,7 @@ class PlanPreviewTests(unittest.TestCase):
         result = build_plan_preview(make_request())
         output = result.model_dump(mode="json", by_alias=True)
 
-        self.assertEqual(output["policyVersion"], "consistency-v1")
+        self.assertEqual(output["policyVersion"], "starter-v1")
         self.assertFalse(output["persisted"])
         self.assertEqual(output["plan"]["weekStart"], "2026-11-23")
 

@@ -4,7 +4,7 @@ import { trainingPlanSchema } from "@/lib/schemas/training-plan";
 export const planPreviewSchema = z.discriminatedUnion("status", [
   z.strictObject({
     status: z.literal("preview"),
-    policyVersion: z.literal("consistency-v1"),
+    policyVersion: z.enum(["starter-v1", "consistency-v1"]),
     persisted: z.literal(false),
     plan: trainingPlanSchema,
     notes: z.array(z.string()),

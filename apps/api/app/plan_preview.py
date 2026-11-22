@@ -29,8 +29,8 @@ class PlanPreviewRequest(PreviewModel):
 
 class PreviewReady(PreviewModel):
     status: Literal["preview"] = "preview"
-    policy_version: Literal["consistency-v1"] = Field(
-        default="consistency-v1",
+    policy_version: Literal["starter-v1"] = Field(
+        default="starter-v1",
         alias="policyVersion",
     )
     persisted: Literal[False] = False
@@ -54,20 +54,6 @@ def build_plan_preview(
 ) -> PreviewReady | PreviewUnavailable:
     profile = request.profile
 
-    if (
-        profile.experience != "regular"
-        or profile.goal != "consistency"
-        or profile.current_runs_per_week == 0
-    ):
-        return PreviewUnavailable(
-            status="unsupported",
-            message=(
-                "This preview currently supports regular runners "
-                "building consistency with a non-zero running baseline. "
-                "Beginner, returning-runner, and race plans are coming later."
-            ),
-        )
-
     # All three baseline answers describe the same historical week.
     maximum_possible_total = (
         profile.current_runs_per_week
@@ -84,26 +70,19 @@ def build_plan_preview(
             ),
         )
 
-    session_count = min(
-        profile.current_runs_per_week,
-        len(profile.available_days),
-    )
+    if profile.current_runs_per_week == 0:
+        session_count = min(2, len(profile.available_days))
+        session_cap = min(15, profile.max_session_minutes)
+        weekly_minutes = session_count * session_cap
+        title = "Easy walk / jog"
+    else:
+        weekly_minutes = profile.current_weekly_minutes
+        session_count = min(profile.current_runs_per_week, len(profile.available_days), weekly_minutes)
+        session_cap = min(profile.max_session_minutes, profile.longest_recent_run_minutes)
+        title = "Easy run" if profile.experience == "regular" else "Easy run / walk"
 
-    selected_days = choose_running_days(
-        profile.available_days,
-        session_count,
-    )
-
-    session_cap = min(
-        profile.max_session_minutes,
-        profile.longest_recent_run_minutes,
-    )
-
-    allocation = allocate_running_minutes(
-        weekly_minutes=profile.current_weekly_minutes,
-        session_count=session_count,
-        session_cap_minutes=session_cap,
-    )
+    selected_days = choose_running_days(profile.available_days, session_count)
+    allocation = allocate_running_minutes(weekly_minutes, session_count, session_cap)
 
     minutes_by_day = dict(
         zip(selected_days, allocation.durations, strict=True)
@@ -121,7 +100,7 @@ def build_plan_preview(
                     id=session_id,
                     date=session_date,
                     kind="run",
-                    title="Easy run",
+                    title=title,
                     durationMinutes=minutes_by_day[weekday],
                     effort="easy",
                 )
@@ -136,13 +115,17 @@ def build_plan_preview(
                 )
             )
 
-    notes = [
-        "This first-week plan focuses on building consistency.",
-        (
-            "Minutes are distributed evenly. This version does not "
-            "prescribe pace or progressive overload."
-        ),
-    ]
+    goal_notes = {
+        "start-running": "This first week gives you time to practise getting out for a run.",
+        "consistency": "This first week focuses on building consistency.",
+        "5k": "Your first week of 5K preparation starts with easy sessions.",
+        "10k": "Your first week of 10K preparation starts with easy sessions.",
+    }
+    notes = [goal_notes[profile.goal]]
+    if not profile.current_runs_per_week:
+        notes.append("The session time includes walking. Add short, easy jogs if comfortable.")
+    elif profile.experience != "regular":
+        notes.append("Walking breaks count toward your session time.")
 
     if allocation.unallocated_minutes:
         notes.append(

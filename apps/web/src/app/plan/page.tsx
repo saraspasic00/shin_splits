@@ -41,7 +41,8 @@ async function PlanContent({ searchParams }: Props) {
     try {
       const outcome = await ensureWeek(db, user.id, nextStart);
       if (outcome === "missing-profile") reason = "Set up your running profile to get your first week.";
-      else if (outcome === "unsupported") reason = "Weekly planning currently supports regular runners building consistency with a recent running baseline.";
+      else if (outcome === "later-week") reason = "Your next training week isn’t ready yet.";
+      else if (outcome === "unsupported") reason = "Please check the recent running totals in your profile.";
       else result = await getWeekPlan(user.id, week, current);
     } catch {
       return <PlanError message="We couldn’t prepare your week. Please try again." retryHref={weekHref(nextStart)} />;

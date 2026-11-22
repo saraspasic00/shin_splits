@@ -11,6 +11,10 @@ export async function ensureWeek(db: SupabaseClient, userId: string, week = getN
     .eq("user_id", userId).eq("week_start", week).maybeSingle();
   if (existing.error) throw Error("Plan lookup failed");
   if (existing.data) return "existing";
+  const history = await db.from("training_plans").select("id")
+    .eq("user_id", userId).lt("week_start", week).limit(1);
+  if (history.error) throw Error("Plan history lookup failed");
+  if (history.data?.length) return "later-week";
   const row = await db.from("runner_profiles").select("*").eq("user_id", userId).maybeSingle();
   if (row.error) throw Error("Profile lookup failed");
   if (!row.data) return "missing-profile";
@@ -23,6 +27,6 @@ export async function ensureWeek(db: SupabaseClient, userId: string, week = getN
     sessions: preview.plan.sessions.map(session => ({ ...session, id: randomUUID() })) });
   const saved = await db.rpc("ensure_runner_week", { p_user: userId, p_row: row.data,
     p_profile: profile, p_plan: plan, p_notes: preview.notes, p_policy_version: preview.policyVersion });
-  if (saved.error || (saved.data !== "created" && saved.data !== "existing")) throw Error("Plan save failed");
-  return saved.data as "created" | "existing";
+  if (saved.error || !["created", "existing", "later-week"].includes(saved.data)) throw Error("Plan save failed");
+  return saved.data as "created" | "existing" | "later-week";
 }

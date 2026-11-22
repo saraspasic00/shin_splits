@@ -369,11 +369,6 @@ export default function OnboardingForm({
                     />
                   </div>
                 )}
-                <p className={styles.hint}>
-                  The current planner supports regular runners building
-                  consistency. Other goals remain available to explore, but
-                  cannot be saved with a plan yet.
-                </p>
               </>
             )}
 
@@ -461,8 +456,7 @@ export default function OnboardingForm({
                   </button>
                 </div>
                 <p className={styles.hint}>
-                  Saving creates or updates next week, starting Monday. Previous
-                  versions are kept; the current week is unchanged.
+                  Your first plan starts on Monday. You can update it until that week begins.
                 </p>
               </>
             )}
@@ -502,17 +496,17 @@ export default function OnboardingForm({
           )}
           <button type="submit" disabled={saving}>
             {saving
-              ? "Saving your week…"
+              ? "Saving…"
               : step < 2
                 ? "Continue"
                 : initialProfile
-                  ? "Save & update my plan"
+                  ? "Save profile"
                   : "Save & create my plan"}
           </button>
         </div>
         <p className={styles.status} role="status">
           {saving
-            ? "Creating your plan, then saving both your profile and plan…"
+            ? "Saving your answers…"
             : ""}
         </p>
       </form>
