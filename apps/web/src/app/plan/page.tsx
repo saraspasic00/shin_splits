@@ -64,12 +64,7 @@ async function PlanContent({ searchParams }: Props) {
       </nav>
       <Link className="plan-profile-button" href="/onboarding">Edit running profile ↗</Link>
     </div>
-    {saved ? <>
-      <WeeklyPlan plan={saved.plan} />
-      {saved.notes.length > 0 && <details className="plan-explanation">
-        <summary>About your week</summary><ul>{saved.notes.map((note, i) => <li key={i}>{note}</li>)}</ul>
-      </details>}
-    </> : <section className="card">
+    {saved ? <WeeklyPlan plan={saved.plan} /> : <section className="card">
       <h2>No saved plan for this week.</h2>
       {reason ? <><p>{reason}</p><Link href="/onboarding">Open running profile</Link></>
         : <Link href={weekHref(nextStart)}>Open next week’s plan</Link>}

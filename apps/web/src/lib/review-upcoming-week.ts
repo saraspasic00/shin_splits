@@ -16,18 +16,16 @@ export async function prepareOrReviewWeek(db: SupabaseClient, userId: string, we
     .eq("user_id", userId).eq("week_start", week).single();
   if (error || !row) throw Error("Upcoming plan unavailable");
   const saved = trainingPlanSchema.parse(row.plan);
-  const reports = await recentWeekReports(db, userId, week);
-  if (!reports.length && row.review_key == null) return "existing";
-  const key = createHash("sha256").update(JSON.stringify(
-    reports.map(({ date, energy, sleep }) => [date, energy, sleep])
-  )).digest("hex");
+  const history = await recentWeekReports(db, userId, week);
+  if (!history.reports.length && !history.runs.length && row.review_key == null) return "existing";
+  const key = createHash("sha256").update(JSON.stringify(history)).digest("hex");
   if (row.review_key === key && row.review_version === saved.version) return "existing";
 
   const profile = runnerProfileSchema.parse(row.profile_snapshot);
   const generated = await getPlanPreview(profile, week);
   if (!generated.ok) throw Error("Baseline planner unavailable");
   if (generated.preview.status !== "preview") return "unsupported";
-  const revised = await planFollowUpWeek(db, userId, profile, generated.preview, reports);
+  const revised = await planFollowUpWeek(db, userId, profile, generated.preview, history);
   // Match by date so existing sessions and any attached journal entries keep their identity.
   const minutes: Record<string, number> = {};
   for (const session of revised.plan.sessions) {

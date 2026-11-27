@@ -108,7 +108,6 @@ export default function WeeklyPlan({ plan, logs = [] }: Props) {
           );
         })}
       </ol>
-      <footer className="weekly-plan-footer">Planned time includes running sessions only.</footer>
     </section>
   );
 }

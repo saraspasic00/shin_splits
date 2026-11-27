@@ -1,0 +1,27 @@
+.summary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.summary.summary h2,
+.summary p { margin: 0; }
+.summary.summary button {
+  width: auto;
+  margin-top: 0.5rem;
+  background: transparent;
+  color: var(--forest);
+  border: 1px solid currentColor;
+}
+.tick {
+  display: inline-block;
+  color: var(--forest);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tick { animation: confirm 180ms ease-out both; }
+  @keyframes confirm {
+    from { opacity: 0; transform: translateY(2px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}

@@ -1,0 +1,9 @@
+.editLog {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  gap: 0.5rem;
+  color: var(--ink);
+  font-weight: 600;
+  text-underline-offset: 0.25em;
+}
