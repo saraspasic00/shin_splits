@@ -15,7 +15,7 @@ def main():
         raise ValueError("Set APP_URL to the HTTPS origin of your deployment")
     endpoint = url + "/api/internal/weekly-plans"
     cursor = None
-    failures = created = 0
+    failures = created = updated = 0
     client = urllib.request.build_opener(NoRedirect)
     while True:
         page = endpoint + ("?" + urllib.parse.urlencode({"after": cursor}) if cursor else "")
@@ -26,10 +26,11 @@ def main():
             result = json.load(response)
         failures += result["failed"]
         created += result["created"]
+        updated += result.get("updated", 0)
         cursor = result["after"]
         if not cursor:
             break
-    print(f"Created {created} weekly plans. Failed attempts: {failures}.")
+    print(f"Created {created} weekly plans. Updated {updated}. Failed attempts: {failures}.")
     return int(failures > 0)
 
 if __name__ == "__main__":

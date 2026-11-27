@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { getNextWeekStart } from "@/lib/saved-plan";
+import { planFollowUpWeek } from "@/lib/follow-up-week";
 import { getPlanPreview } from "@/lib/plan-preview";
 import { trainingPlanSchema } from "@/lib/schemas/training-plan";
 import { profilePlanRequestSchema, profilePlanReceiptSchema } from "@/lib/profile-plan-contract";
@@ -69,34 +70,25 @@ export async function PUT(request: Request) {
       .eq("user_id", user.id).lt("week_start", weekStart).limit(1);
     if (history.error) return reply({ message: "Your plan history couldn’t load." }, 503);
 
-    let plan: z.infer<typeof trainingPlanSchema> | null = null;
-    let notes: string[] = [];
-    let policyVersion: string | null = null;
-    if (!history.data?.length) {
-      // Finish generation and validation before writing either record.
-      const generated = await getPlanPreview(profile, weekStart);
-      if (!generated.ok) return reply({ message: `${generated.message} Your profile and plan have not changed.` }, 503);
-      if (generated.preview.status !== "preview") {
-        return reply({ message: `${generated.preview.message} Your profile and plan have not changed.` }, 422);
-      }
+    const generated = await getPlanPreview(profile, weekStart);
+    if (!generated.ok) return reply({ message: generated.message }, 503);
+    if (generated.preview.status !== "preview") return reply({ message: generated.preview.message }, 422);
 
-      const preview = generated.preview;
-      plan = trainingPlanSchema.parse({
-        ...preview.plan,
-        id: current?.id ?? randomUUID(),
-        version: (current?.plan.version ?? 0) + 1,
-        sessions: preview.plan.sessions.map((session) => ({ ...session, id: randomUUID() })),
-      });
-
-      notes = preview.notes;
-      policyVersion = preview.policyVersion;
-    }
+    const preview = history.data?.length
+      ? await planFollowUpWeek(supabase, user.id, profile, generated.preview)
+      : generated.preview;
+    const plan = trainingPlanSchema.parse({
+      ...preview.plan,
+      id: current?.id ?? randomUUID(),
+      version: (current?.plan.version ?? 0) + 1,
+      sessions: preview.plan.sessions.map(session => ({ ...session, id: randomUUID() })),
+    });
 
     const { data: saved, error: saveError } = await supabase.rpc("save_profile_and_next_plan", {
       p_profile: profile,
       p_plan: plan,
-      p_notes: notes,
-      p_policy_version: policyVersion,
+      p_notes: preview.notes,
+      p_policy_version: preview.policyVersion,
       p_request_id: requestId,
       p_expected_plan_id: current?.id ?? null,
       p_expected_version: current?.plan.version ?? null,
@@ -120,3 +112,4 @@ export async function PUT(request: Request) {
     return reply({ message: "We couldn’t confirm the save. Retry, or reload to check your plan." }, 503);
   }
 }
+

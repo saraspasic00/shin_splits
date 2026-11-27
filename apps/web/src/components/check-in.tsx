@@ -164,7 +164,7 @@ export default function CheckIn({
 
         <p className="form-note">
           Check-in for <time dateTime={date}>{date}</time>.
-          {" "}Saved to your account. Your plan won’t change automatically yet.
+          {" "}Your check-ins help shape future training weeks.
         </p>
 
         <button type="submit" disabled={isSending}>

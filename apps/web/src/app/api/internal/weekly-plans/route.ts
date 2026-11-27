@@ -1,6 +1,6 @@
 import { timingSafeEqual, createHash } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
-import { ensureWeek } from "@/lib/ensure-week";
+import { prepareOrReviewWeek } from "@/lib/review-upcoming-week";
 import { getNextWeekStart } from "@/lib/saved-plan";
 
 const digest = (s: string) => createHash("sha256").update(s).digest();
@@ -19,8 +19,9 @@ export async function POST(request: Request) {
   if (after) query = query.gt("user_id", after);
   const { data, error } = await query;
   if (error || !data) return new Response(null, { status: 503 });
-  const results = await Promise.allSettled(data.map(row => ensureWeek(db,row.user_id,week)));
+  const results = await Promise.allSettled(data.map(row => prepareOrReviewWeek(db, row.user_id, week)));
   return Response.json({ after: data.length === 5 ? data[data.length-1].user_id : null,
     failed: results.filter(r => r.status === "rejected").length,
+    updated: results.filter(r => r.status === "fulfilled" && r.value === "updated").length,
     created: results.filter(r => r.status === "fulfilled" && r.value === "created").length });
 }

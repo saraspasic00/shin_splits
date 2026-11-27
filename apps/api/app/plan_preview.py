@@ -116,10 +116,10 @@ def build_plan_preview(
             )
 
     goal_notes = {
-        "start-running": "This first week gives you time to practise getting out for a run.",
-        "consistency": "This first week focuses on building consistency.",
-        "5k": "Your first week of 5K preparation starts with easy sessions.",
-        "10k": "Your first week of 10K preparation starts with easy sessions.",
+        "start-running": "This week gives you time to practise getting out for a run.",
+        "consistency": "This week focuses on building consistency.",
+        "5k": "This week includes easy sessions toward your 5K goal.",
+        "10k": "This week includes easy sessions toward your 10K goal.",
     }
     notes = [goal_notes[profile.goal]]
     if not profile.current_runs_per_week:
