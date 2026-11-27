@@ -2,6 +2,7 @@
 
 import { useRef, useState, type SubmitEvent } from "react";
 
+import styles from "./check-in-summary.module.css";
 import type { CalendarDate } from "@/types/training";
 import { checkInRequestSchema } from "@/lib/schemas/check-in";
 import {
@@ -25,7 +26,6 @@ const questions = [
 type SubmissionState =
   | { status: "idle" }
   | { status: "sending" }
-  | { status: "success"; message: string }
   | { status: "error"; message: string };
 
 type CheckInProps = {
@@ -37,16 +37,10 @@ export default function CheckIn({
   date,
   initialCheckIn = null,
 }: CheckInProps) {
-  const [state, setState] = useState<SubmissionState>(
-    initialCheckIn
-      ? {
-          status: "success",
-          message: "Your saved check-in. You can update your answers.",
-        }
-      : { status: "idle" },
-  );
-
-  const [hasSaved, setHasSaved] = useState(Boolean(initialCheckIn));
+  const [state, setState] = useState<SubmissionState>({ status: "idle" });
+  const [saved, setSaved] = useState(initialCheckIn);
+  const [editing, setEditing] = useState(!initialCheckIn);
+  const [interacted, setInteracted] = useState(false);
   const inFlight = useRef(false);
 
   const isSending = state.status === "sending";
@@ -112,11 +106,10 @@ export default function CheckIn({
         return;
       }
 
-      setHasSaved(true);
-      setState({
-        status: "success",
-        message: "Check-in saved. You can update it at any time.",
-      });
+      setInteracted(true);
+      setSaved(receipt.data.checkIn);
+      setEditing(false);
+      setState({ status: "idle" });
     } catch {
       setState({
         status: "error",
@@ -126,6 +119,20 @@ export default function CheckIn({
     } finally {
       inFlight.current = false;
     }
+  }
+
+  if (saved && !editing) {
+    return (
+      <section className={`card check-in-card ${styles.summary}`} aria-labelledby="check-in-title">
+        <h2 id="check-in-title">Today’s check-in</h2>
+        <p><span className={styles.tick} aria-hidden="true">✓</span> Saved</p>
+        <p>{saved.energy[0].toUpperCase() + saved.energy.slice(1)} energy · {saved.sleep} sleep</p>
+        <button type="button" autoFocus={interacted} onClick={() => {
+          setInteracted(true);
+          setEditing(true);
+        }}>Edit check-in</button>
+      </section>
+    );
   }
 
   return (
@@ -151,7 +158,8 @@ export default function CheckIn({
                     name={name}
                     value={option}
                     required
-                    defaultChecked={initialCheckIn?.[name] === option}
+                    autoFocus={interacted && name === "energy" && option === saved?.energy}
+                    defaultChecked={saved?.[name] === option}
                   />
                   <span>
                     {option.charAt(0).toUpperCase() + option.slice(1)}
@@ -170,17 +178,20 @@ export default function CheckIn({
         <button type="submit" disabled={isSending}>
           {isSending
             ? "Saving…"
-            : hasSaved
+            : saved
               ? "Update check-in"
               : "Save check-in"}
         </button>
 
+        {saved && <button type="button" disabled={isSending} onClick={() => {
+          setState({ status: "idle" });
+          setEditing(false);
+        }}>Cancel</button>}
+
         <p className="status" role="status" aria-live="polite">
           {state.status === "sending"
             ? "Saving your check-in…"
-            : state.status === "success"
-              ? state.message
-              : ""}
+            : ""}
         </p>
 
         {state.status === "error" && (

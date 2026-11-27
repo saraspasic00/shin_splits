@@ -16,7 +16,7 @@ import styles from "@/components/run-log.module.css";
 
 type Props = {
   params: Promise<{ sessionId: string }>;
-  searchParams: Promise<{ planId?: string | string[]; version?: string | string[] }>;
+  searchParams: Promise<{ planId?: string | string[]; version?: string | string[]; from?: string | string[] }>;
 };
 
 export default function RunLogPage(props: Props) {
@@ -88,6 +88,7 @@ async function RunLogContent({ params, searchParams }: Props) {
       </div>
       <RunLogForm
         key={`${user.id}:${identity.planId}:${identity.planVersion}:${identity.sessionId}:${existing?.revision ?? 0}`}
+        fromHome={query.from === "home"}
         identity={identity}
         session={session}
         initialLog={existing}

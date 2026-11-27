@@ -7,8 +7,10 @@ import CheckIn from "@/components/saved-check-in";
 import PlanError from "@/components/plan-error";
 import { createClient } from "@/lib/supabase/server";
 import { getWeekPlan } from "@/lib/week-plans";
-    import { currentMonday, weekHref } from "@/lib/week-calendar";
+import { getPlanRunLogs } from "@/lib/run-logs";
+import { currentMonday, weekHref } from "@/lib/week-calendar";
 import styles from "./home.module.css";
+import actionStyles from "./home-log.module.css";
 import RunHistory from "@/components/run-history";
 import HomeArrival from "@/components/home-arrival";
 const weekdayFormatter = new Intl.DateTimeFormat("en-GB", {
@@ -92,6 +94,19 @@ async function DashboardContent() {
 
   const todaySession = plan?.sessions.find((session) => session.date === today);
 
+  const todayLogs = plan && plan.source !== "sample" && todaySession?.kind === "run"
+    ? await getPlanRunLogs(plan.id, plan.version)
+    : null;
+  const feedback = todayLogs?.ok
+    ? todayLogs.logs.find(log => log.sessionId === todaySession?.id)?.feedback
+    : undefined;
+  const logHref = plan && todaySession && todayLogs?.ok
+    ? {
+        pathname: `/plan/log/${todaySession.id}`,
+        query: { planId: plan.id, version: String(plan.version), from: "home" },
+      }
+    : null;
+
   const nextRun = runs.find((run) => run.date > today);
 
   // Keep today's rest day visible when one is explicitly scheduled.
@@ -165,12 +180,16 @@ async function DashboardContent() {
             {featuredSession?.kind === "run" ? (
               <>
                 <p className={styles.duration}>
-                  <span>{featuredSession.durationMinutes}</span>
+                  <span>{feedback?.status === "completed" ? feedback.actualMinutes : featuredSession.durationMinutes}</span>
                   <span className={styles.unit}>min</span>
                 </p>
 
                 <p className={styles.effort}>
-                  {featuredSession.effort === "easy"
+                  {feedback?.status === "completed"
+                    ? "Completed"
+                    : feedback?.status === "skipped"
+                    ? "Skipped · planned duration"
+                    : featuredSession.effort === "easy"
                     ? "Easy effort"
                     : "Steady effort"}
                 </p>
@@ -185,8 +204,8 @@ async function DashboardContent() {
               </p>
             )}
 
-            <Link className={styles.action} href={planHref}>
-              {!plan
+            <Link className={feedback ? actionStyles.editLog : styles.action} href={logHref ?? planHref}>
+              {logHref ? (feedback ? "Edit log" : "Log this run") : !plan
                 ? "Create my first week"
                 : isPastPlan
                   ? "View saved plan"

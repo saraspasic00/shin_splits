@@ -14,6 +14,7 @@ test("saved upcoming week responds to check-ins without a profile save", async t
   const row = {id:"plan",plan:{version:1,sessions:structuredClone(sessions)},profile_snapshot:{},
     review_key:null,review_version:null};
   const reports = [];
+  const logs = [];
   let previews = 0;
   const prefix = "data:text/javascript,";
   const mods = {
@@ -22,8 +23,9 @@ test("saved upcoming week responds to check-ins without a profile save", async t
     "./schemas/runner-profile":"export const runnerProfileSchema={parse:x=>x}",
     "./schemas/training-plan":"export const trainingPlanSchema={parse:x=>x}",
     "./schemas/check-in":"export const checkInRequestSchema={array:()=>({max:()=>({parse:x=>x})})}",
+    "./schemas/run-log":"export const plannedRunSchema={parse:x=>x}, runFeedbackSchema={parse:x=>x}",
     "./run-log-dates":"export const runLogToday=()=> '2026-11-23'",
-    "./week-calendar":"export const offsetDate=()=> '2026-11-17'",
+    "./week-calendar":"export const offsetDate=(date,n)=>new Date(Date.parse(date)+n*86400000).toISOString().slice(0,10)",
     "./plan-preview":"export const getPlanPreview=(...args)=>globalThis.testPreview(...args)",
   };
   globalThis.testPreview = () => {
@@ -39,9 +41,22 @@ test("saved upcoming week responds to check-ins without a profile save", async t
   const {prepareOrReviewWeek} = await import("../src/lib/review-upcoming-week.ts");
   const db = {
     from(table) {
-      assert.ok(["training_plans","check_ins"].includes(table));
-      return {select(){return this},eq(){return this},gte(){return this},lte(){return this},lt(){return this},
-        single(){return {data:row}},order(){return {data:reports}}};
+      assert.ok(["training_plans","check_ins","run_logs"].includes(table));
+      let rows = table === "run_logs" ? logs : reports;
+      return {
+        select(){return this},
+        eq(field,value){
+          if (field === "user_id") assert.equal(value,"runner");
+          else if (field === "status") rows = rows.filter(r=>r.status===value);
+          return this;
+        },
+        gte(field,value){rows=rows.filter(r=>r[field]>=value);return this},
+        lte(field,value){rows=rows.filter(r=>r[field]<=value);return this},
+        lt(field,value){rows=rows.filter(r=>r[field]<value);return this},
+        single(){return {data:row}},
+        order(){return this},
+        then(resolve){resolve({data:rows})},
+      };
     },
     rpc(name, args) {
       assert.equal(name,"review_upcoming_week");
@@ -71,6 +86,22 @@ test("saved upcoming week responds to check-ins without a profile save", async t
   assert.equal(row.plan.version,2);
   assert.deepEqual(row.plan.sessions,saved.plan.sessions);
   reports.splice(0);
+  assert.equal(await run(),"updated");
+  assert.deepEqual(row.plan.sessions,sessions);
+  const runRow = { status:"completed", completed_on:"2026-11-10", actual_minutes:45,
+    perceived_effort:8, planned_session:{durationMinutes:45,effort:"easy"} };
+  logs.push(runRow, {...runRow, completed_on:"2026-11-23", perceived_effort:9});
+  assert.equal(await run(),"updated");
+  assert.deepEqual(row.plan.sessions.map(s=>s.durationMinutes),[40,40,40,40]);
+  const before = previews;
+  logs.push({...runRow,status:"skipped"}, {...runRow,completed_on:"2026-11-09"},
+    {...runRow,completed_on:"2026-11-24"});
+  assert.equal(await run(),"existing");
+  assert.equal(previews,before);
+  logs[0].actual_minutes = 35;
+  assert.equal(await run(),"existing");
+  assert.equal(previews,before + 1);
+  logs[1].perceived_effort = null;
   assert.equal(await run(),"updated");
   assert.deepEqual(row.plan.sessions,sessions);
 });

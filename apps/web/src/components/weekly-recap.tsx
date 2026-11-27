@@ -1,4 +1,5 @@
 import "server-only";
+import styles from "./weekly-recap.module.css";
 import { z } from "zod";
 import { runLogToday } from "@/lib/run-log-dates";
 import type { SavedRunLog } from "@/lib/schemas/run-log";
@@ -41,16 +42,31 @@ export default async function WeeklyRecap({ plan, logs }: {
   } catch {
     return <p className="muted">The weekly recap couldn’t load. <a href={"/plan?week=" + plan.weekStart}>Try again</a></p>;
   }
-  const remaining = [
-    [facts.past_without_feedback, "past without feedback"],
+  const statuses = [
+    [facts.skipped_runs, "skipped"],
+    [facts.past_without_feedback, "without feedback"],
     [facts.due_today, "due today"],
     [facts.upcoming_runs, "upcoming"],
   ] as const;
-  return <details className="plan-explanation">
-    <summary>Weekly recap</summary>
-    <p>{facts.completed_runs} of {facts.planned_runs} planned runs completed · {facts.skipped_runs} skipped</p>
-    <p>{facts.recorded_minutes} min recorded · {facts.planned_minutes} min planned</p>
-    {remaining.some(([n]) => n > 0) && <p>{remaining.filter(([n]) => n > 0)
-      .map(([n, label]) => n + " " + label).join(" · ")}</p>}
-  </details>;
+  const statusLine = statuses.filter(([n]) => n > 0)
+    .map(([n, label]) => n + " " + label).join(" · ");
+
+  return (
+    <section className={styles.recap} aria-labelledby="weekly-recap-title">
+      <div>
+        <h2 id="weekly-recap-title">Weekly recap</h2>
+        {statusLine && <p>{statusLine}</p>}
+      </div>
+      <dl className={styles.metrics}>
+        <div>
+          <dt>Runs completed</dt>
+          <dd>{facts.completed_runs} <small>of {facts.planned_runs}</small></dd>
+        </div>
+        <div>
+          <dt>Minutes recorded</dt>
+          <dd>{facts.recorded_minutes} <small>of {facts.planned_minutes} planned</small></dd>
+        </div>
+      </dl>
+    </section>
+  );
 }

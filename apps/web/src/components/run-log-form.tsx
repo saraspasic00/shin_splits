@@ -17,10 +17,11 @@ type Props = {
   identity: RunLogIdentity;
   session: PlannedRun;
   today: string;
+  fromHome?: boolean;
   initialLog: SavedRunLog | null;
 };
 
-export default function RunLogForm({ identity, session, today, initialLog }: Props) {
+export default function RunLogForm({ identity, session, today, initialLog, fromHome = false }: Props) {
   const [saved, setSaved] = useState(initialLog);
   const [outcome, setOutcome] = useState<"completed" | "skipped">(
     initialLog?.feedback.status ?? "completed",
@@ -35,7 +36,7 @@ export default function RunLogForm({ identity, session, today, initialLog }: Pro
   const inFlight = useRef(false);
   const completedOn = completionDateForSession(session, saved);
   const futureCompletion = outcome === "completed" && completedOn > today;
-const returnHref = weekHref(mondayOf(session.date));
+  const returnHref = fromHome ? "/" : weekHref(mondayOf(session.date));
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     if (inFlight.current || conflict) return;
@@ -92,7 +93,7 @@ const returnHref = weekHref(mondayOf(session.date));
       }
       setSaved(receipt.data.log);
       setNote(receipt.data.log.feedback.note);
-      setMessage("Saved. Opening your updated week…");
+      setMessage(fromHome ? "Saved. Opening Home…" : "Saved. Opening your updated week…");
       // A fresh request discards any prefetched calendar/Home payloads.
       // Route-handler revalidation alone does not refresh the client router.
       window.location.assign(returnHref);
@@ -170,7 +171,7 @@ const returnHref = weekHref(mondayOf(session.date));
           aria-describedby={futureCompletion ? "run-date-note" : undefined}>
           {pending ? "Saving…" : outcome === "skipped" ? "Save as skipped" : saved ? "Update run log" : "Save run log"}
         </button>
-        <Link href={returnHref}>Back to weekly plan</Link>
+        <Link href={returnHref}>{fromHome ? "Back to Home" : "Back to weekly plan"}</Link>
       </div>
       <p className={styles.status} role="status">{pending ? "Saving your run log…" : message}</p>
       {error && <p className={styles.error} role="alert">{error}</p>}
